@@ -1,32 +1,48 @@
 .App {
-  text-align: center;
+    text-align: center;
+    padding: 5%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.table-form-input {
+    margin-right: 30px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.dictionary {
+    width: 30%;
+    display: inline-block;
+    margin-right: 3%;
+    margin-top: 60px;
+    box-shadow: 2px 2px 10px lightgrey;
 }
 
-.App-link {
-  color: #61dafb;
+.dictionary header {
+    text-align: left;
+    padding: 0 5%;
+    position: relative;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dictionary header h2 {
+    display: inline-block;
+}
+
+.dictionary header svg {
+    position: absolute;
+    right: 0;
+    margin: 7%;
+}
+
+.row-form {
+    margin: 10px 0 10px;
+}
+
+.row-input {
+    width: 30% !important;
+    margin-right: 10px;
+}
+
+.icon {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center;
+    width: 10%;
 }

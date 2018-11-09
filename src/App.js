@@ -1,28 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import FlipMove from "react-flip-move";
+
 import './App.css';
+import TableContainer from './components/TableContainer';
+import TableForm from './components/TableForm';
 
 class App extends Component {
-  render() {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tables: [],
+        }
+    }
+
+    render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <MuiThemeProvider>
+          <div className="App">
+
+              {/* NEW TABLE FORM */}
+              <TableForm onSubmit={submission => {
+                  this.setState({
+                      tables: [...this.state.tables, submission]
+                  })}} />
+
+              <FlipMove duration={250} easing="cubic-bezier(1, 0, 0, 1)">
+                  {/* RENDER THE LIST OF TABLES */}
+                  {this.state.tables.map((table, i) => (
+                      <TableContainer
+                          key={i}
+                          title={table.title}
+                      />
+                  ))}
+              </FlipMove>
+          </div>
+        </MuiThemeProvider>
     );
-  }
+    }
 }
 
 export default App;
