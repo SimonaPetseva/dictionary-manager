@@ -12,42 +12,32 @@ class TableContainer extends Component {
             rows: [],
             editIndex: -1,
             edit: '',
-            editError: '',
+            errors: []
         };
     }
 
-
     validateEdit = (i) => {
-        let isError = false;
-        const errors = {
-            editError: "",
-        };
+        let newErrors = [...this.state.errors];
 
         // Domain/range empty
         if ((!this.state.edit.replace(/\s/g, '').length)) {
-            isError = true;
-            errors.editError = "Cannot be blank";
+            newErrors[i] = "Cannot be blank";
         }
 
         // Domain and range the same
         if(this.state.edit === this.state.rows[i].domain && this.state.edit === this.state.rows[i].range) {
-            isError = true;
-            errors.editError = "Domain and range cannot be the same and/or blank.";
+            newErrors[i] = "Domain and range are the same.";
         }
 
-        if (isError) {
-            this.setState({
-                ...this.state,
-                ...errors
-            });
-        }
-
-        return isError;
+        this.setState({
+            errors: newErrors
+        });
     };
 
     startEditing = (i) => {
         this.setState({
-            editIndex: i
+            editIndex: i,
+            errors: [this.state.errors.splice(i, 1)]
         });
     };
 
@@ -85,6 +75,7 @@ class TableContainer extends Component {
     removeRow = (i) => {
         this.setState(state => ({
             rows: state.rows.filter((row, j) => j !== i),
+            errors: state.errors.filter((error, j) => j !== i)
         }));
     };
 
@@ -93,6 +84,12 @@ class TableContainer extends Component {
             rows: [],
         });
         e.target.parentNode.parentNode.parentNode.remove(0);
+    };
+
+    handleErrors = (domainError, rangeError) => {
+        this.setState({
+            errors: [...this.state.errors, `${domainError} ${rangeError}`]
+        });
     };
 
     render() {
@@ -111,6 +108,7 @@ class TableContainer extends Component {
                     editIndex={this.state.editIndex}
                     stopEditing={this.stopEditing}
                     handleChange={this.handleChange}
+                    errors={this.state.errors}
 
                     data={this.state.rows}
                     header={[
@@ -121,7 +119,7 @@ class TableContainer extends Component {
                         {
                             name: 'Range',
                             prop: 'range'
-                        }
+                        },
                     ]}
                 />
 
@@ -131,6 +129,7 @@ class TableContainer extends Component {
                         this.setState({
                             rows: [...this.state.rows, submission]
                         })}
+                    handleErrors={this.handleErrors}
                 />
 
             </div>

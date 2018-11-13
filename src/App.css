@@ -46,3 +46,9 @@
     text-align: center;
     width: 10%;
 }
+
+.errors {
+    padding-left: 0 !important;
+    white-space: normal !important;
+    color: red;
+}

@@ -22,7 +22,8 @@ const row = (
     editIndex,
     handleChange,
     stopEditing,
-    editError
+    editError,
+    errors
 ) => {
     const currentlyEditing = editIndex === i;
     return(
@@ -37,7 +38,6 @@ const row = (
                                 name={headerItem.prop}
                                 onChange={(e) => handleChange(e, headerItem.prop, i)}
                                 value={dataItem[headerItem.prop]}
-                                errorText={editError}
                             />
                         ) : (
                             dataItem[headerItem.prop]
@@ -45,6 +45,12 @@ const row = (
                     </TableRowColumn>
                 ))
             }
+
+            {/*Errors*/}
+            <TableRowColumn className="errors">
+                <div>{errors[i]}</div>
+            </TableRowColumn>
+
             {/*Edit Icon*/}
             <TableRowColumn className="icon">
                 {currentlyEditing ? (
@@ -70,7 +76,8 @@ const DictTable = ({
     editIndex,
     handleChange,
     stopEditing,
-    editError
+    editError,
+    errors
 }) => (
     <Table>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -82,6 +89,8 @@ const DictTable = ({
                         </TableHeaderColumn>
                     ))
                 }
+                {/*For errors*/}
+                <TableHeaderColumn />
                 {/*2 more header columns bc of icons*/}
                 <TableHeaderColumn />
                 <TableHeaderColumn />
@@ -100,7 +109,8 @@ const DictTable = ({
                     editIndex,
                     handleChange,
                     stopEditing,
-                    editError
+                    editError,
+                    errors
                 )
             )}
         </TableBody>

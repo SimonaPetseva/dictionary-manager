@@ -30,38 +30,27 @@ class RowForm extends Component {
             rangeError: ""
         };
 
-        if ((!this.state.domain.replace(/\s/g, '').length)) {
+        if ((!this.state.domain.replace(/\s/g, '').length) || (!this.state.range.replace(/\s/g, '').length)) {
             isError = true;
             errors.domainError = "Cannot be blank";
         }
 
-        if ((!this.state.range.replace(/\s/g, '').length)) {
-            isError = true;
-            errors.rangeError = "Cannot be blank.";
-        }
-
         // Domain and range the same
-        if(this.state.domain === this.state.range) {
+        if(this.state.domain === this.state.range && ( (this.state.domain.replace(/\s/g, '').length) || (this.state.range.replace(/\s/g, '').length) )) {
             isError = true;
-            errors.domainError = "Domain and range cannot be the same and/or blank.";
-            errors.rangeError = "Domain and range cannot be the same and/or blank.";
+            errors.domainError = "Domain and range are the same.";
+            errors.rangeError = "";
         }
 
         // Duplicate combination of domain and range
         if (this.state.domains.includes(this.state.domain) && this.state.ranges.includes(this.state.range)) {
             isError = true;
             errors.domainError = "Combination of domain and range already exists";
-            errors.rangeError = "Combination of domain and range already exists";
-        }
-
-        // Duplicate domain
-        if (this.state.domains.includes(this.state.domain)) {
-            isError = true;
-            errors.domainError = "Domain already exists.";
+            errors.rangeError = "";
         }
 
         // Cycles and chains
-        if (this.state.domains.includes(this.state.range)) {
+        if (this.state.domains.includes(this.state.domain) && this.state.domains.includes(this.state.range)) {
             isError = true;
             errors.rangeError = "This value already exist in the Domain column of another entry.";
         }
@@ -78,24 +67,28 @@ class RowForm extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        const err = this.validate();
+        this.validate();
 
-        if(!err) {
+        setTimeout(() => { this.props.handleErrors(this.state.domainError, this.state.rangeError) }, 1000);
+
+
+        setTimeout(() => {
             this.setState({
-                domains: [...this.state.domains, this.state.domain],
-                ranges: [...this.state.ranges, this.state.range],
-            },
+                    domains: [...this.state.domains, this.state.domain],
+                    ranges: [...this.state.ranges, this.state.range],
+                },
                 () => {
-                this.props.onSubmit(this.state);
-                this.setState({
-                    domain: "",
-                    range: "",
-                    domainError: "",
-                    rangeError: "",
-                })
-            }
+                    this.props.onSubmit(this.state);
+                    this.setState({
+                        domain: "",
+                        range: "",
+                        domainError: "",
+                        rangeError: "",
+                    })
+                }
             );
-        }
+        }, 1500);
+
     };
 
     render() {
@@ -107,7 +100,6 @@ class RowForm extends Component {
                     value={this.state.domain}
                     onChange={e => this.onChange(e)}
                     floatingLabelFixed
-                    errorText={this.state.domainError}
                     className="row-input"
                 />
                 <TextField
@@ -116,7 +108,6 @@ class RowForm extends Component {
                     value={this.state.range}
                     onChange={e => this.onChange(e)}
                     floatingLabelFixed
-                    errorText={this.state.rangeError}
                     className="row-input"
                 />
                 <RaisedButton
